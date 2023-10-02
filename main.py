@@ -31,12 +31,12 @@ class Flip(tk.Tk):
         self.unbind("<Button-1>")
         self.text_lbl.pack_forget()
 
-        for j in range(3):
+        for i in range(3):
             # Три фрейма - три строчки
             frame = tk.Frame()
             frame.pack()
             self.frames.append(frame)
-            for i in range(3):
+            for j in range(3):
                 # Добавление кнопок на фреймы со случайным значением бэкграунда
                 button = tk.Button(frame,
                                    command=lambda i=i, j=j: self.change_color(i, j),
@@ -48,11 +48,11 @@ class Flip(tk.Tk):
     def change_color(self, i, j):
         # Применяем все действия если они возможны
         for direction in self.DIRECTIONS:
-            new_i, new_j = i + direction[0], j + direction[1]
+            new_x, new_y = j + direction[0], i + direction[1]
 
             # т.е если они лежат в этом промежутке меняем значения бэкграунда на противоположное
-            if 0 <= new_i < 3 and 0 <= new_j < 3:
-                button_index = self.POSITION_MAPPING[(new_i, new_j)]
+            if 0 <= new_x < 3 and 0 <= new_y < 3:
+                button_index = self.POSITION_MAPPING[(new_x, new_y)]
                 current_color = self.buttons[button_index].cget('bg')
 
                 new_color = 'black' if current_color == 'white' else 'white'
@@ -64,10 +64,12 @@ class Flip(tk.Tk):
     def check_for_victory(self):
         # Если победили удаляем все кнопки и все фреймы (для этого мы заранее составили их список)
         if all(button.cget('bg') == 'white' for button in self.buttons):
-            for button in self.buttons: button.destroy()
+            for button in self.buttons:
+                button.destroy()
             self.buttons.clear()
 
-            for frame in self.frames: frame.destroy()
+            for frame in self.frames:
+                frame.destroy()
             self.frames.clear()
 
             self.put_main_frames()
